@@ -6,7 +6,7 @@
 
   <groupId>org.iuscsg.autotyper</groupId>
   <artifactId>auto-typer</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.2-SNAPSHOT</version>
 
   <name>auto-typer</name>
   <url>https://github.com/ius-csg/AutoTyper</url>

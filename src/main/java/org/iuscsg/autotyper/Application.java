@@ -2,25 +2,25 @@ package org.iuscsg.autotyper;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
-// changing the package or the name of this class will require updating the isRunningInJar method.
-public class Application extends Frame implements ActionListener
+// changing the package or the name of this class will require updating the isRunningInJar method in this class.
+public class Application extends Frame
 {
     private TextField txt = makeTextField();
+    private HistoryManager historyManager = new HistoryManager();
 
-    public Application() {
-        System.out.println(System.console());
+    private Application() {
         if(shouldRedirectLogging()) // logging for if anyone runs into issues.
             turnOnLogging();
         setIcon();
+        Button btn = makeButton();
+        historyManager.init(txt, btn);
         add(txt);
-        add(makeButton());
+        add(btn);
         setTitle("Auto Typer");
         setSize(300,300);
         setLayout(new GridLayout(2,1));
@@ -39,19 +39,20 @@ public class Application extends Frame implements ActionListener
     private Button makeButton() {
         Button btn = new Button();
         btn.setLabel("Type it!");
-        btn.setFont(new Font("Helvetica", Font.PLAIN, 18));
-        btn.addActionListener(this);
-        btn.setForeground(Color.WHITE);
-        btn.setBackground(Color.decode("#263238"));
-        return btn;
+        btn.addActionListener(e ->typeWithDelay(txt.getText()));
+        return themeControl(btn, 18);
+    }
+
+    private <T extends Component> T themeControl(T component, int fontSize) {
+        component.setForeground(Color.WHITE);
+        component.setFont(new Font("Helvetica", Font.PLAIN, fontSize));
+        component.setBackground(Color.decode("#263238"));
+        return component;
     }
 
     private TextField makeTextField() {
         TextField txt = new TextField();
-        txt.setForeground(Color.WHITE);
-        txt.setFont(new Font("Helvetica", Font.PLAIN, 12));
-        txt.setBackground(Color.decode("#263238"));
-        return txt;
+        return themeControl(txt, 12);
     }
 
     private void setIcon() {
@@ -68,10 +69,9 @@ public class Application extends Frame implements ActionListener
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Thread t  = new Thread(new Typer(txt.getText()));
-        t.start();
+    private void typeWithDelay(String text) {
+        (new Thread(new Typer(text))).start();
+        historyManager.addToHistory(text);
     }
 
     private boolean shouldRedirectLogging() {
@@ -91,6 +91,5 @@ public class Application extends Frame implements ActionListener
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 }
