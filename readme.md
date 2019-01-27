@@ -7,5 +7,13 @@ Paste text into VM's easily.
 Go to [releases](https://github.com/ius-csg/AutoTyper/releases) and download the latest release.
 
 ## Usage
-You can type or paste what you want the program to type for you in the input box. When you're ready to paste into a vm press paste. After 3 seconds the program will type the input text giving you time to click on the vm to gain focus.
+Type paste into the textbox and press Type It! After 2 seconds the program will 
+type the input text. This should give you enough time to click on the VM to gain focus.
+
+## History Feature
+
+Just like bash, you can hit the up arrow to go back to what you last pasted. Hit the down arrow to
+travers back to what you are currently typing.
+
+
 

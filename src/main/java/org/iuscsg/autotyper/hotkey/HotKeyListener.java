@@ -5,7 +5,6 @@ import java.awt.event.KeyListener;
 
 public class HotKeyListener implements KeyListener
 {
-    private boolean modifierKey = false;
     private boolean backDown = false;
     private boolean forwardDown = false;
 
@@ -24,30 +23,27 @@ public class HotKeyListener implements KeyListener
     public void keyPressed(KeyEvent e)
     {
         switch(e.getKeyCode()) {
-            case KeyEvent.VK_CONTROL: modifierKey = true; break;
-            case KeyEvent.VK_ALT: modifierKey = true; break;
-            case KeyEvent.VK_LEFT: backDown = true; break;
-            case KeyEvent.VK_RIGHT: forwardDown = true; break;
+            case KeyEvent.VK_UP: backDown = true; break;
+            case KeyEvent.VK_DOWN: forwardDown = true; break;
         }
         executeListenersIfHotKeysPressed();
-    }
-
-    private void executeListenersIfHotKeysPressed() {
-        if (backDown && modifierKey) {
-            onBackListener.onChange();
-        } else if(forwardDown && modifierKey) {
-            onForwardListener.onChange();
-        }
     }
 
     @Override
     public void keyReleased(KeyEvent e)
     {
         switch(e.getKeyCode()) {
-            case KeyEvent.VK_CONTROL: modifierKey = false; break;
-            case KeyEvent.VK_ALT: modifierKey = false; break;
-            case KeyEvent.VK_LEFT: backDown = false; break;
-            case KeyEvent.VK_RIGHT: forwardDown = false; break;
+            case KeyEvent.VK_UP: backDown = false; break;
+            case KeyEvent.VK_DOWN: forwardDown = false; break;
+        }
+    }
+
+
+    private void executeListenersIfHotKeysPressed() {
+        if (backDown) {
+            onBackListener.onChange();
+        } else if(forwardDown) {
+            onForwardListener.onChange();
         }
     }
 }
