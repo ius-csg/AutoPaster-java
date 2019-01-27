@@ -18,9 +18,9 @@ public class Application extends Frame implements ActionListener
         add(txt1);
         add(btn1);
         setTitle("Auto Typer");
-        setSize(300,300);//frame size 300 width and 300 height
-        setLayout(layout);//no layout manager
-        setVisible(true);//now frame will be visible, by default not visible
+        setSize(300,300);
+        setLayout(layout);
+        setVisible(true);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we)
             {
