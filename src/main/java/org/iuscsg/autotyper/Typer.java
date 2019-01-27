@@ -6,14 +6,14 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Paster implements Runnable
+public class Typer implements Runnable
 {
     private String textToPrint;
     private Map<String, Integer> specialChars;
     private Map<String, Integer> shiftKeys;
     private Robot robot;
 
-    Paster(String textToPrint) {
+    Typer(String textToPrint) {
         this.textToPrint = textToPrint;
         this.specialChars = this.createSpecialChars();
         this.shiftKeys = this.createShiftKeys();

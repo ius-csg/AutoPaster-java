@@ -35,7 +35,7 @@ public class Application extends Frame implements ActionListener
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Thread t  = new Thread(new Paster(txt1.getText()));
+        Thread t  = new Thread(new Typer(txt1.getText()));
         t.start();
     }
 }

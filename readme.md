@@ -1,4 +1,4 @@
-# Auto Paster
+# Auto Typer
 
 Paste text into VM's easily.
 
