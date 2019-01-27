@@ -17,7 +17,7 @@ public class Application extends Frame implements ActionListener
         btn1.addActionListener(this);
         add(txt1);
         add(btn1);
-        setTitle("Auto Paster");
+        setTitle("Auto Typer");
         setSize(300,300);//frame size 300 width and 300 height
         setLayout(layout);//no layout manager
         setVisible(true);//now frame will be visible, by default not visible
