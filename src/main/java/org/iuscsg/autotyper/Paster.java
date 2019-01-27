@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Test Text: abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890 -= ,./;'[] <>?:"{} \ | !@#$%^&*()_+
+ * Test Text: abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890 -= ,./;'[] <>?:"{} \ | !@#$%^&*()_+ ~`
  */
 public class Paster implements Runnable
 {
