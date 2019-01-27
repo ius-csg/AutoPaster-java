@@ -29,38 +29,36 @@ public class Typer implements Runnable
     {
         try {
             Thread.sleep(2000);
-            pressKeys(this.textToPrint);
-
+            typeKeys(this.textToPrint);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
     }
 
-    public void pressKeys(String keysCombination) throws IllegalArgumentException {
-        for (String key : keysCombination.split("")) {
-            try {
-                if(this.specialChars.containsKey(key))
-                    typeKey(key, this.specialChars.get(key));
-                else if(this.shiftKeys.containsKey(key))
-                    typeKeyWithShift(key, this.shiftKeys.get(key));
-                else if(isAlpha(key) && key.toUpperCase().equals(key))
-                    typeKeyWithShift(key, getKeyCode(key));
-                else if(isAlphaNumeric(key))
-                    typeKey(key, getKeyCode(key));
-                else {
-                    System.out.println("UNKNOWN KEY: " + key);
-                }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch(NoSuchFieldException e ) {
-                throw new IllegalArgumentException(key.toUpperCase() + " is invalid key\n"+"VK_"+key.toUpperCase() + " is not defined in java.awt.event.KeyEvent");
-            }
+    public void typeKeys(String text) throws IllegalArgumentException {
+        for (String key : text.split(""))
+            typeKey(key);
+    }
+
+    public void typeKey(String key) {
+        try {
+            if(this.shiftKeys.containsKey(key))
+                typeKeyWithShift(key, this.shiftKeys.get(key));
+            else if(this.specialChars.containsKey(key))
+                typeKeyWithKeyCode(key, this.specialChars.get(key));
+            else if(isAlpha(key) && key.toUpperCase().equals(key))
+                typeKeyWithShift(key, getKeyCode(key));
+            else if(isAlphaNumeric(key))
+                typeKeyWithKeyCode(key, getKeyCode(key));
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch(NoSuchFieldException e ) {
+            throw new IllegalArgumentException(key.toUpperCase() + " is invalid key\n"+"VK_"+key.toUpperCase() + " is not defined in java.awt.event.KeyEvent");
         }
     }
 
-
-    void typeKeyWithShift(String key, int keycode) {
+    private void typeKeyWithShift(String key, int keycode) {
         try {
             robot.keyPress(KeyEvent.VK_SHIFT);
             robot.keyPress(keycode);
@@ -69,9 +67,9 @@ public class Typer implements Runnable
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid key: " + key + " with Shift key and keycode: " + keycode);
         }
-
     }
-    void typeKey(String key, int keycode) {
+
+    private void typeKeyWithKeyCode(String key, int keycode) {
         try {
             robot.keyPress(keycode);
             robot.keyRelease(keycode);
@@ -80,7 +78,7 @@ public class Typer implements Runnable
         }
     }
 
-    HashMap<String, Integer> createSpecialChars() {
+    private HashMap<String, Integer> createSpecialChars() {
         HashMap<String, Integer> keyMappings = new HashMap<>();
         keyMappings.put(",", KeyEvent.VK_COMMA);
         keyMappings.put(".", KeyEvent.VK_PERIOD);
@@ -97,7 +95,7 @@ public class Typer implements Runnable
         return keyMappings;
     }
 
-    HashMap<String, Integer> createShiftKeys() {
+    private HashMap<String, Integer> createShiftKeys() {
         HashMap<String, Integer> keyMappings = new HashMap<>();
         keyMappings.put("?", KeyEvent.VK_SLASH);
         keyMappings.put("<", KeyEvent.VK_COMMA);
@@ -126,11 +124,12 @@ public class Typer implements Runnable
     private boolean isAlpha(String text) {
         return text.matches("[a-zA-Z]+");
     }
+
     private boolean isAlphaNumeric(String text) {
         return text.matches("[a-zA-Z0-9]+");
     }
+
     private int getKeyCode(String key) throws NoSuchFieldException, IllegalAccessException {
         return KeyEvent.class.getField("VK_" + key.toUpperCase()).getInt(null);
     }
-
 }
