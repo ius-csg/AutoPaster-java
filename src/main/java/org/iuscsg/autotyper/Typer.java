@@ -40,7 +40,6 @@ public class Typer implements Runnable
     public void pressKeys(String keysCombination) throws IllegalArgumentException {
         for (String key : keysCombination.split("")) {
             try {
-                System.out.println(key);
                 if(this.specialChars.containsKey(key))
                     typeKey(key, this.specialChars.get(key));
                 else if(this.shiftKeys.containsKey(key))
