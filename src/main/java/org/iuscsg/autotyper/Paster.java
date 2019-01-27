@@ -107,7 +107,7 @@ public class Paster implements Runnable
         keyMappings.put("=", KeyEvent.VK_EQUALS);
         keyMappings.put(" ", KeyEvent.VK_SPACE);
         keyMappings.put(";", KeyEvent.VK_SEMICOLON);
-
+        keyMappings.put("`", KeyEvent.VK_BACK_QUOTE);
         // %, ^, ?
         //  ",", ".", "/", "\\", "|", "?", "<", ">", "!", "@", "#", "$", "%", "^",
         //            "&", "*", "(", ")", "_", "-", "+", "=", "[", "]", "{", "}"
@@ -137,6 +137,7 @@ public class Paster implements Runnable
         keyMappings.put(")", KeyEvent.VK_0);
         keyMappings.put("_", KeyEvent.VK_MINUS);
         keyMappings.put("+", KeyEvent.VK_EQUALS);
+        keyMappings.put("~", KeyEvent.VK_BACK_QUOTE);
         return keyMappings;
     }
 
