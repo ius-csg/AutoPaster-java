@@ -1,7 +1,5 @@
 package org.iuscsg.autotyper;
 
-import org.iuscsg.autotyper.hotkey.HotKeyListener;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,9 +11,9 @@ class HistoryManager
     private int historyIndex = 0;
     private TextField txt;
 
-    void init(TextField txt, Button btn) {
+    void init(TextField txt) {
         this.txt = txt;
-        HotKeyListener hotkeyListener = initHotKeyListener();
+
         txt.addTextListener(e -> {
             if(ignoreTextChange) {
                 ignoreTextChange = false;
@@ -23,10 +21,6 @@ class HistoryManager
             }
             historyIndex = -1;
         });
-
-        txt.addKeyListener(hotkeyListener);
-        btn.addKeyListener(hotkeyListener);
-
     }
 
     void addToHistory(String text) {
@@ -36,23 +30,28 @@ class HistoryManager
         historyIndex = 0;
     }
 
-    private HotKeyListener initHotKeyListener() {
-        return new HotKeyListener(() -> {
-            if(historyIndex > 0){
-                historyIndex--;
-                ignoreTextChange = true;
-                txt.setText(history.get(historyIndex));
-            }
-        }, () -> {
-            if(history.size() > historyIndex + 1) {
-                if(historyIndex == -1) {
-                    history.add(0, txt.getText());
-                    historyIndex++;
-                }
+    public void goBack() {
+        if(history.size() > historyIndex + 1) {
+            if(historyIndex == -1) {
+                history.add(0, txt.getText());
                 historyIndex++;
-                ignoreTextChange = true;
-                txt.setText(history.get(historyIndex));
             }
-        });
+            historyIndex++;
+            ignoreTextChange = true;
+            System.out.println("Set Text");
+            txt.setText(history.get(historyIndex));
+        }
     }
+
+    public void goForward()
+    {
+        if (historyIndex > 0) {
+            historyIndex--;
+            ignoreTextChange = true;
+            System.out.println("Set Text");
+            txt.setText(history.get(historyIndex));
+        }
+    }
+
+
 }

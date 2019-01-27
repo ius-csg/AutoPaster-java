@@ -1,7 +1,11 @@
 package org.iuscsg.autotyper;
 
+import org.iuscsg.autotyper.hotkey.HotKeyListener;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -10,15 +14,17 @@ import java.io.*;
 // changing the package or the name of this class will require updating the isRunningInJar method in this class.
 public class Application extends Frame
 {
-    private TextField txt = makeTextField();
+    private TextField txt = themeControl(new TextField(), 12);
     private HistoryManager historyManager = new HistoryManager();
-
+    private Button btn = makeButton();
+    private HotKeyListener keyListener = makeHotKeyListener();
     private Application() {
         if(shouldRedirectLogging()) // logging for if anyone runs into issues.
             turnOnLogging();
         setIcon();
-        Button btn = makeButton();
-        historyManager.init(txt, btn);
+        historyManager.init(txt);
+        btn.addKeyListener(keyListener);
+        txt.addKeyListener(keyListener);
         add(txt);
         add(btn);
         setTitle("Auto Typer");
@@ -39,7 +45,7 @@ public class Application extends Frame
     private Button makeButton() {
         Button btn = new Button();
         btn.setLabel("Type it!");
-        btn.addActionListener(e ->typeWithDelay(txt.getText()));
+        btn.addActionListener(e -> onBtn_Click());
         return themeControl(btn, 18);
     }
 
@@ -48,11 +54,6 @@ public class Application extends Frame
         component.setFont(new Font("Helvetica", Font.PLAIN, fontSize));
         component.setBackground(Color.decode("#263238"));
         return component;
-    }
-
-    private TextField makeTextField() {
-        TextField txt = new TextField();
-        return themeControl(txt, 12);
     }
 
     private void setIcon() {
@@ -67,6 +68,17 @@ public class Application extends Frame
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void onBtn_Click() {
+        if(keyListener.IsModifierKeDown()) {
+            String clipboard = getClipboard();
+            if(clipboard != null && clipboard.length() > 0) {
+                typeWithDelay(clipboard);
+                return;
+            }
+        }
+        typeWithDelay(txt.getText());
     }
 
     private void typeWithDelay(String text) {
@@ -91,5 +103,28 @@ public class Application extends Frame
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getClipboard() {
+        try {
+            return (String) Toolkit.getDefaultToolkit()
+                    .getSystemClipboard().getData(DataFlavor.stringFlavor);
+        } catch (UnsupportedFlavorException | IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private HotKeyListener makeHotKeyListener() {
+        return new HotKeyListener(
+                (boolean down) -> { if(down) historyManager.goForward(); },
+                (boolean down) -> { if(down) historyManager.goBack(); },
+                (boolean down) -> {
+                    System.out.println("modifier: " + down);
+                    if(down)
+                        btn.setLabel("Type from clipboard!");
+                    else
+                        btn.setLabel("Type It!");
+                });
     }
 }
