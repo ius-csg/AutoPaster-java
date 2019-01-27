@@ -42,42 +42,42 @@ public class Paster implements Runnable
             try {
                 System.out.println(key);
                 if(this.specialChars.containsKey(key))
-                    typeKey(this.specialChars.get(key));
+                    typeKey(key, this.specialChars.get(key));
                 else if(this.shiftKeys.containsKey(key))
-                    typeKeyWithShift(this.shiftKeys.get(key));
+                    typeKeyWithShift(key, this.shiftKeys.get(key));
                 else if(isAlpha(key) && key.toUpperCase().equals(key))
-                    typeKeyWithShift(KeyEvent.class.getField("VK_" + key.toUpperCase()).getInt(null));
+                    typeKeyWithShift(key, getKeyCode(key));
                 else if(isAlphaNumeric(key))
-                    typeKey(KeyEvent.class.getField("VK_" + key.toUpperCase()).getInt(null));
+                    typeKey(key, getKeyCode(key));
                 else {
                     System.out.println("UNKNOWN KEY: " + key);
                 }
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             } catch(NoSuchFieldException e ) {
-                throw new IllegalArgumentException(key.toUpperCase()+" is invalid key\n"+"VK_"+key.toUpperCase() + " is not defined in java.awt.event.KeyEvent");
+                throw new IllegalArgumentException(key.toUpperCase() + " is invalid key\n"+"VK_"+key.toUpperCase() + " is not defined in java.awt.event.KeyEvent");
             }
         }
     }
 
 
-    void typeKeyWithShift(int event) {
+    void typeKeyWithShift(String key, int keycode) {
         try {
             robot.keyPress(KeyEvent.VK_SHIFT);
-            robot.keyPress(event);
-            robot.keyRelease(event);
+            robot.keyPress(keycode);
+            robot.keyRelease(keycode);
             robot.keyRelease(KeyEvent.VK_SHIFT);
         } catch (IllegalArgumentException e) {
-            System.out.println("Invalid key code ^");
+            System.out.println("Invalid key: " + key + " with Shift key and keycode: " + keycode);
         }
 
     }
-    void typeKey(int event) {
+    void typeKey(String key, int keycode) {
         try {
-            robot.keyPress(event);
-            robot.keyRelease(event);
+            robot.keyPress(keycode);
+            robot.keyRelease(keycode);
         } catch (IllegalArgumentException e) {
-            System.out.println("Invalid key code ^");
+            System.out.println("Invalid key: " + key + " with keycode: " + keycode);
         }
     }
 
