@@ -6,16 +6,12 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Test Text: abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890 -= ,./;'[] <>?:"{} \ | !@#$%^&*()_+ ~`
- */
 public class Paster implements Runnable
 {
-    public String textToPrint;
-    // , . / ? < > ! # $ % ^ & * ( ) _ - + = ` ~
-    Map<String, Integer> specialChars;
-    Map<String, Integer> shiftKeys;
-    Robot robot;
+    private String textToPrint;
+    private Map<String, Integer> specialChars;
+    private Map<String, Integer> shiftKeys;
+    private Robot robot;
 
     Paster(String textToPrint) {
         this.textToPrint = textToPrint;
@@ -41,13 +37,9 @@ public class Paster implements Runnable
 
     }
 
-    private void pressKeys(String keysCombination) throws IllegalArgumentException
-    {
-
-        for (String key : keysCombination.split(""))
-        {
-            try
-            {
+    public void pressKeys(String keysCombination) throws IllegalArgumentException {
+        for (String key : keysCombination.split("")) {
+            try {
                 System.out.println(key);
                 if(this.specialChars.containsKey(key))
                     typeKey(this.specialChars.get(key));
@@ -60,17 +52,12 @@ public class Paster implements Runnable
                 else {
                     System.out.println("UNKNOWN KEY: " + key);
                 }
-
-            } catch (IllegalAccessException e)
-            {
+            } catch (IllegalAccessException e) {
                 e.printStackTrace();
-
-            }catch(NoSuchFieldException e )
-            {
+            } catch(NoSuchFieldException e ) {
                 throw new IllegalArgumentException(key.toUpperCase()+" is invalid key\n"+"VK_"+key.toUpperCase() + " is not defined in java.awt.event.KeyEvent");
             }
         }
-
     }
 
 
@@ -108,15 +95,11 @@ public class Paster implements Runnable
         keyMappings.put(" ", KeyEvent.VK_SPACE);
         keyMappings.put(";", KeyEvent.VK_SEMICOLON);
         keyMappings.put("`", KeyEvent.VK_BACK_QUOTE);
-        // %, ^, ?
-        //  ",", ".", "/", "\\", "|", "?", "<", ">", "!", "@", "#", "$", "%", "^",
-        //            "&", "*", "(", ")", "_", "-", "+", "=", "[", "]", "{", "}"
         return keyMappings;
     }
 
     HashMap<String, Integer> createShiftKeys() {
         HashMap<String, Integer> keyMappings = new HashMap<>();
-
         keyMappings.put("?", KeyEvent.VK_SLASH);
         keyMappings.put("<", KeyEvent.VK_COMMA);
         keyMappings.put(">", KeyEvent.VK_PERIOD);
@@ -141,11 +124,14 @@ public class Paster implements Runnable
         return keyMappings;
     }
 
-    public boolean isAlpha(String text) {
+    private boolean isAlpha(String text) {
         return text.matches("[a-zA-Z]+");
     }
-    public boolean isAlphaNumeric(String text) {
+    private boolean isAlphaNumeric(String text) {
         return text.matches("[a-zA-Z0-9]+");
+    }
+    private int getKeyCode(String key) throws NoSuchFieldException, IllegalAccessException {
+        return KeyEvent.class.getField("VK_" + key.toUpperCase()).getInt(null);
     }
 
 }

@@ -9,9 +9,8 @@ import org.junit.Test;
  */
 public class AppTest 
 {
-    /**
-     * Rigorous Test :-)
-     */
+    // Find out some what to test this string of text
+    // abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890 -= ,./;'[] <>?:"{} \ | !@#$%^&*()_+ ~`
     @Test
     public void shouldAnswerWithTrue()
     {
