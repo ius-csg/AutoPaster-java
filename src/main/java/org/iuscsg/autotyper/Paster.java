@@ -1,3 +1,5 @@
+package org.iuscsg.autotyper;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -35,7 +37,7 @@ public class Paster implements Runnable
                         event = KeyEvent.VK_SPACE;
                     else
                         event = (int) KeyEvent.class.getField("VK_" + key.toUpperCase()).getInt(null);
-
+                    // , . / ? < > ! # $ % ^ & * ( ) _ - + = ` ~
                     robot.keyPress(event);
                     robot.keyRelease(event);
 
@@ -52,4 +54,5 @@ public class Paster implements Runnable
             e.printStackTrace();
         }
     }
+
 }
