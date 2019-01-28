@@ -3,6 +3,7 @@ package org.iuscsg.autotyper;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,6 +52,13 @@ public class Typer implements Runnable
                 typeKeyWithShift(key, getKeyCode(key));
             else if(isAlphaNumeric(key))
                 typeKeyWithKeyCode(key, getKeyCode(key));
+            else if(key.equals("\n"))
+                typeKeyWithKeyCode(key, KeyEvent.VK_ENTER);
+            else if(key.equals("\r")) {
+                // ignore this character
+            }
+            else
+                System.out.println("Unknown Key: " + key);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch(NoSuchFieldException e ) {
@@ -61,8 +69,7 @@ public class Typer implements Runnable
     private void typeKeyWithShift(String key, int keycode) {
         try {
             robot.keyPress(KeyEvent.VK_SHIFT);
-            robot.keyPress(keycode);
-            robot.keyRelease(keycode);
+            typeKeyWithKeyCode(key, keycode);
             robot.keyRelease(KeyEvent.VK_SHIFT);
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid key: " + key + " with Shift key and keycode: " + keycode);
@@ -73,6 +80,7 @@ public class Typer implements Runnable
         try {
             robot.keyPress(keycode);
             robot.keyRelease(keycode);
+            robot.delay(8);
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid key: " + key + " with keycode: " + keycode);
         }
