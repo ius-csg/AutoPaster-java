@@ -3,6 +3,7 @@ package org.iuscsg.autotyper;
 import org.iuscsg.autotyper.hotkey.HotKeyListener;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -21,15 +22,29 @@ public class Application extends Frame
     private Application() {
         if(shouldRedirectLogging()) // logging for if anyone runs into issues.
             turnOnLogging();
+        setAlwaysOnTop(true);
         setIcon();
+        Checkbox checkbox = themeControl(new Checkbox(), 12);
+        checkbox.setLabel("Always on Top");
         historyManager.init(txt);
         btn.addKeyListener(keyListener);
         txt.addKeyListener(keyListener);
-        add(txt);
-        add(btn);
+
+
         setTitle("Auto Typer");
         setSize(300,300);
-        setLayout(new GridLayout(2,1));
+        GridLayout grid = new GridLayout(1,1);
+        grid.setHgap(20);
+        Panel panel = themeControl(new Panel(), 12);
+        BoxLayout boxLayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
+        panel.setLayout(boxLayout);
+        panel.add(checkbox);
+        panel.add(txt);
+        panel.add(btn);
+
+        setBackground(Color.decode("#263238"));
+        setLayout(grid);
+        add(panel);
         setVisible(true);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
