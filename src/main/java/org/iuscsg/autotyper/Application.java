@@ -14,7 +14,7 @@ import java.io.*;
 // changing the package or the name of this class will require updating the isRunningInJar method in this class.
 public class Application extends Frame
 {
-    private TextField txt = themeControl(new TextField(), 12);
+    private TextArea txt = themeControl(new TextArea("", 0, 0, TextArea.SCROLLBARS_NONE), 12);
     private HistoryManager historyManager = new HistoryManager();
     private Button btn = makeButton();
     private HotKeyListener keyListener = makeHotKeyListener();
@@ -34,6 +34,11 @@ public class Application extends Frame
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 System.exit(0);
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                keyListener.onFrameDeactivated();
             }
         });
     }
@@ -71,7 +76,7 @@ public class Application extends Frame
     }
 
     private void onBtn_Click() {
-        if(keyListener.IsModifierKeDown()) {
+        if(keyListener.getModifierKeyState().isKeyDown()) {
             String clipboard = getClipboard();
             if(clipboard != null && clipboard.length() > 0) {
                 typeWithDelay(clipboard);
@@ -98,7 +103,7 @@ public class Application extends Frame
 
     private void turnOnLogging() {
         try {
-            PrintStream out = new PrintStream(new FileOutputStream("AutoTyper.log"));
+            PrintStream out = new PrintStream(new FileOutputStream("AutoTyper.log", true));
             System.setOut(out);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -107,8 +112,7 @@ public class Application extends Frame
 
     private String getClipboard() {
         try {
-            return (String) Toolkit.getDefaultToolkit()
-                    .getSystemClipboard().getData(DataFlavor.stringFlavor);
+            return (String) Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor);
         } catch (UnsupportedFlavorException | IOException e) {
             e.printStackTrace();
         }
@@ -120,11 +124,13 @@ public class Application extends Frame
                 (boolean down) -> { if(down) historyManager.goForward(); },
                 (boolean down) -> { if(down) historyManager.goBack(); },
                 (boolean down) -> {
-                    System.out.println("modifier: " + down);
-                    if(down)
-                        btn.setLabel("Type from clipboard!");
-                    else
-                        btn.setLabel("Type It!");
-                });
+                    if(down) btn.setLabel("Type from clipboard!");
+                    else btn.setLabel("Type It!");
+                },
+                (down) -> { if(txt.hasFocus()) {
+                    txt.selectAll();
+                } }
+                );
     }
+
 }

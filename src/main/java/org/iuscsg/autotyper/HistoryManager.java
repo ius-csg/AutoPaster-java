@@ -9,9 +9,9 @@ class HistoryManager
     private ArrayList<String> history = new ArrayList<>(Collections.singletonList(""));
     private boolean ignoreTextChange = false;
     private int historyIndex = 0;
-    private TextField txt;
+    private TextArea txt;
 
-    void init(TextField txt) {
+    void init(TextArea txt) {
         this.txt = txt;
 
         txt.addTextListener(e -> {
@@ -38,7 +38,6 @@ class HistoryManager
             }
             historyIndex++;
             ignoreTextChange = true;
-            System.out.println("Set Text");
             txt.setText(history.get(historyIndex));
         }
     }
@@ -48,7 +47,6 @@ class HistoryManager
         if (historyIndex > 0) {
             historyIndex--;
             ignoreTextChange = true;
-            System.out.println("Set Text");
             txt.setText(history.get(historyIndex));
         }
     }

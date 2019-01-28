@@ -61,8 +61,7 @@ public class Typer implements Runnable
     private void typeKeyWithShift(String key, int keycode) {
         try {
             robot.keyPress(KeyEvent.VK_SHIFT);
-            robot.keyPress(keycode);
-            robot.keyRelease(keycode);
+            typeKeyWithKeyCode(key, keycode);
             robot.keyRelease(KeyEvent.VK_SHIFT);
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid key: " + key + " with Shift key and keycode: " + keycode);
@@ -73,6 +72,7 @@ public class Typer implements Runnable
         try {
             robot.keyPress(keycode);
             robot.keyRelease(keycode);
+            robot.delay(8);
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid key: " + key + " with keycode: " + keycode);
         }
